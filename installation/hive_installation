@@ -1,0 +1,163 @@
+HIVE Installation:
+
+Download the hive binary distribution from the apache hive website.
+
+Extract tar file into a specified directory
+
+Export HIVE_HOME= hive home directory
+
+Export HADOOP_HOME=hadoop home directory
+
+Hive uses Any RDBMS to store its Meta information (databases, tables, indexes etc. info)
+
+Derby: Hive has an embedded database called Apache Derby (java DB). It is useful for development activities. It has some limitations like it allows only one connection; there is no global database management. It uses current directory has the database location.
+
+MySQL: We can store Meta information in Full featured RDBMS like MySQL or Oracle for production deployments where many developers trying to connect Hadoop cluster concurrently.
+
+We have to options to run MySQL server.
+
+Run MySQL on local machine
+
+Run MySQL on dedicated machine (remote machine)
+
+Here MySQL is running on one machine all other hive clients are trying to connect shared Mata Information which is in MySQL. This communication is happening with protocol called thrift. We have to run hiveserver for this communication.
+
+Using Apache Derby:
+
+There is no installation for Apache Derby:
+
+Create the data warehouse location in HDFS by default /user/hive/warehouse it is in hive-default.xml.template.
+
+Hadoop fs –mkdir /user/hive/warehouse
+
+Change the warehouse directory permissions as 755
+
+Hadoop fs –chmod –R 755 /user/hive/warehouse
+
+Hive uses hive-default.xml.template for default configurations.
+
+If we are overriding any of the configuration parameters, we need copy the hive-default.xml.template to hive-site.xml and then modify the customized configuration parameters.
+
+We can use our own directory by modifying the value of hive.metastore.warehouse.location in hive-site.xml.
+
+Hadoop fs –mkdir “/my ware house”
+
+Hadoop fs –chmod –R 755 “/my ware house”
+
+Run hive by using script called hive which is in bin directory of Hive Home. It works for single connection.
+
+Using Apache MySQL:
+
+Installing and configuring MySQL:
+
+run mysql in Linux shell
+
+If MySQL is not installed, then installing it by using apt-get command
+
+sudo apt-get install mysql-server.x.x (provide username as root and password as xxxxxxx)
+
+Enter into MySQL command line shell to create a user name called hive and its password.
+
+Mysql –u root –p password
+
+Create user “hive”@”hostname” identified by “password”
+
+Create database name called hivemetastore.
+
+
+Create database hivemetastore
+
+Give all the permissions to user hive on database hivemetastore.
+
+Grant all on hivemetastore.* to ‘hive’@’hostname’
+
+Finally flush the permissions.
+
+> flush privileges;
+
+Download mysql-jdbc-connector.
+
+Copy it to hive lib directory.
+
+Here we are modifying all the default database configurations of hive-default.xml.template.
+
+So we have to copy hive-default.xml.template to hive-site.xml.
+
+=====================================================================================
+
+<configuration>
+<property>
+        <name>hive.metastore.warehouse.dir</name>
+        <value>/warehouse</value>
+</property>
+<property>
+        <name>hive.metastore.local</name>
+        <value>false</value>
+</property>
+<property>
+        <name>hive.metastore.uris</name>
+        <value>thrift://localhost:10000</value>
+</property>
+<property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://localhost:3306/metastore</value>
+</property>
+<property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>com.mysql.jdbc.Driver</value>
+</property>
+<property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>hive</value>
+</property>
+<property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>hive</value>
+</property>
+</configuration>
+
+=========================================================================================
+
+Create the data warehouse location in HDFS by default /user/hive/warehouse it is in hive-site.xml.
+
+Hadoop fs –mkdir /user/hive/warehouse
+
+Change the warehouse directory permissions as 755
+
+Hadoop fs –chmod –R 755 /user/hive/warehouse
+
+We can use our own directory by modifying the value hive.metastore.warehouse.location in hive-site.xml.
+
+Hadoop fs –mkdir “/my ware house”
+
+Hadoop fs –chmod –R 755 “/my ware house”
+
+Change the “hive.metastore.local” from true to false. The default value is true means metastore is running on local machine. But here we decided to run metastore on remote machine so change it to false.
+
+Change the “hive.metastore.uris” value to “thrift://hostname:10000”. It says hive server is running on particular hostname with port number 10000. It uses thrift as the protocol.
+
+Hadoop fs –mkdir “my ware house”
+
+Hadoop fs –chmod –R 755 “my ware house”
+
+Run the hiveserver
+
+Hive –service hiveserver &
+
+Run the metastore
+
+Hive –service metastore &
+
+    Status
+    API
+    Training
+    Shop
+    Blog
+    About
+
+    © 2014 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Contact
+
