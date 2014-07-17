@@ -1,0 +1,35 @@
+Pig Installation:
+
+Download pig binary distribution from apache pig website.
+
+Extract tar file into a specified directory.
+
+Export HADOOP_HOME=Hadoop Home Directory
+
+Export HADOOP_CONF_DIR= Hadoop Home Directory/conf
+
+Export PIG_HOME= Pig Home Directory
+
+Export PIG_CLASSPATH=$HADOOP_CONF_DIR
+
+Run Pig in local Mode
+
+Pig –x local
+
+Run Pig in Hadoop Mode
+
+Pig
+
+    Status
+    API
+    Training
+    Shop
+    Blog
+    About
+
+    © 2014 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Contact
+
