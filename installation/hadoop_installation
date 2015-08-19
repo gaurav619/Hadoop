@@ -125,13 +125,13 @@ We have to modify the some important configuration propertys in core-site.xml, h
 Core-site.xml:
 <property>
 <name>fs.default.name</name>
-<value>hdfs://hostname:port</value>
+<value>hdfs://hostname:port</value>(port value used is 9000)
 </property>
 
 Mapred-site.xml:
 <property>
 <name>mapred.job.tracker</name>
-<value>hostname:port1</value>
+<value>hostname:port1</value>  (port value used is 9001)
 </property>
 
 hdfs-site.xml:
@@ -142,12 +142,12 @@ hdfs-site.xml:
 
 <property>
 <name>dfs.name.dir</name>
-<value>path of namenode[namenode meta information directory] directory</value>
+<value>path of namenode[namenode meta information directory] directory</value>  (ex :- /home/bigdata/hdfsdata/name)
 </property>
 
 <property>
 <name>dfs.data.dir</name>
-<value>path of datanode[actual data location] directory</value>
+<value>path of datanode[actual data location] directory</value>     (ex :- /home/bigdata/hdfsdata/data)
 </property>
 
 slaves:
