@@ -1,0 +1,131 @@
+Function is a group of statements that performs a task. We can divide the code into separate functions 
+such that each function performs a specific task.
+There is minor difference between scala methods and functions.
+
+A method is the one which is part of a class and has name and signature where as scala function is an object that
+could be assigned to a variable.
+
+In simple words to say, function defined as member of some object is called a method.
+
+Scala also has support for nested functions.
+
+Syntax of scala Function definition:
+def functionName ([list of parameters]) : [return type] = {
+   function body
+   return [expr]
+}
+
+Here return type could be any valid scala data type. list of parameters would be list of variables separated by comma.
+return type and list of parameters are optional.
+
+Example of a function with return type:
+
+object Sum {
+def Sum(a:Int, b:Int) : Int = {
+ var sum:Int =0;
+ sum=a+b;
+ return sum }
+ }
+Function which returns nothing can return Unit that is equivalent to void in Java.
+Funtions that donot return anything are called Procedures.
+
+Example of a function that returns nothing:
+object Hello{
+   def printMe( ) : Unit = {
+      println("Hello, Scala!")
+   }
+}
+
+
+Functions call-by-name:
+Typically, the parameters of the function would be by-value parameters which means the value of the parameter is 
+determined before it is passed to the function.
+
+Suppose if we would need a function that accepts an expression as a parameter which will not be evaluated until it 
+is called within our function. To support this feature, scala offers call-by-name parameters.
+
+Example:
+object CallByName
+{
+  def main(args:Array[String])
+   {
+    delayed(calc());
+
+   }
+     def calc() :Int={
+	
+         println("In calc function...");
+         return 9
+	 }
+   def delayed(t: => Int)
+   {
+    println("In delayed method..");
+    print ("Parameter value is.."+t)
+   }
+}
+
+Output:
+In delayed method..
+In calc function...
+Parameter value is..9
+
+
+In the above example calc() is the parameter to delayed() function. 
+Once the delayed is invoked, the message : "In delayed method" is printed indicating that delayed() has been entered.
+Now, while executing second print statement in delayed() (the execution takes place from right to left), the 
+parameter 't'indicates the value being returned from calc. Hence calc() is entered and displays the message 
+"In calc function...". The returned value 9 is printed as 
+"Parameter value is...9
+
+Funtion with variable number of arguments:
+The last parameter to a funtion may be repeated. We can variable length arguments list to the function.
+Example:
+def printArgs(a:Int, args:String*)
+{
+  a=10;
+  println("Value of a is...."+a);
+  for(arg<-args)
+  {
+    println(arg);
+  }
+}
+
+printArgs(10,"hello","hi')
+
+Result:
+Value of a is....10
+hello
+hi
+
+a is intialized to 10 and all the remaining arguments are considered as args.
+Here args declared as String* is actually an Array[String]. Also, note that the variable args is specified in the last.
+Ordinary arguments specified after varargs would lead to an error.
+Example:
+def VarArgs_NormPars(args:String*,a:Int)
+     | {
+     |   println("Integer is.."+a);
+     |   for(arg<-args)
+     |   {
+     |     println("Arg value is..."+arg);
+     |   }
+     | }
+
+Result:
+<console>:7: error: *-parameter must come last
+       def VarArgs_NormPars(args:String*,a:Int)
+
+
+Scala lets us specify default values for the function parameters. The arguments for such parameters can be omitted 
+in which case, default value would be taken.
+Example:
+object Test {
+   def main(args: Array[String]) {
+        println( "Returned Value : " + addInt() );
+   }
+   def addInt( a:Int=5, b:Int=7 ) : Int = {
+      var sum:Int = 0
+      sum = a + b
+
+      return sum
+   }
+}
