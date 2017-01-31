@@ -1,0 +1,178 @@
+Scala Sets:
+It is a collection of pairwise different elements of same type. The key distinct feature of set is that it doesn't contain 
+duplicate elements.
+There are two kinds of sets- immutable and mutable.
+By default, scala sets are immutable. If we want to use mutable set, import scala.collection.mutable.Set class.
+immutable set refers to as Set and we can refer the mutable set as mutable.Set
+
+Declare Immutable set:
+val s:Set[Int]=Set() //Empty set of integer type
+val s:Set[Int]=Set(1,3,5,7)
+val s=Set(1,3,5,7)
+
+Basic Operations on Set:
+head -> returns first element of the set
+tail -> returns a set containing all the elements except the first
+isEmpty -> returns true if the set is empty otherwise false
+
+Example:
+val fruit = Set("apples", "oranges", "pears")
+
+println( "Head of fruit : " + fruit.head )
+println( "Tail of fruit : " + fruit.tail )
+println( "Check if fruit is empty : " + fruit.isEmpty )
+println( "Check if nums is empty : " + nums.isEmpty )
+
+Result:
+Head of fruit : apples
+Tail of fruit : Set(oranges, pears)
+Check if fruit is empty : false
+Check if nums is empty : true
+ 
+Concatenating Sets:
+++ or Set.++() method is used to concatenate two or more sets. One point to be noted here is while concatenating the sets,
+duplicate elements are removed.
+Example:
+val fruit1 = Set("apples", "oranges", "pears")
+val fruit2 = Set("mangoes", "banana")
+
+// use two or more sets with ++ as operator
+var fruit = fruit1 ++ fruit2
+println( "fruit1 ++ fruit2 : " + fruit )
+
+// use two sets with ++ as method
+fruit = fruit1.++(fruit2)
+println( "fruit1.++(fruit2) : " + fruit )
+
+Other methods like Set.max and Set.min are used to find out the maximum and minimum elements in the set.
+Example:
+val num = Set(5,6,9,20,30,45)
+
+// find min and max of the elements
+println( "Min element in Set(5,6,9,20,30,45) : " + num.min ) // returns 5
+println( "Max element in Set(5,6,9,20,30,45) : " + num.max ) // returns 45
+
+Find common values in Sets:
+Use Set.& or Set.intersect are used to find out the common values between twos sets.
+Example:
+ val num1 = Set(5,6,9,20,30,45)
+      val num2 = Set(50,60,9,20,35,55)
+
+// find common elements between two sets
+println( "num1.&(num2) : " + num1.&(num2) )
+println( "num1.intersect(num2) : " + num1.intersect(num2) )
+
+Scala Set Methods:
+
+
+
+Scala Maps:
+Maps is a collection of key/value pairs. A value can be retrieved based on its key. Keys are unique but values need 
+not be unique.Maps are also called Hash tables. Two types of maps- immutable and mutable. Bydefault, Scala maps are 
+immutable. To usemutable map, import scala.collection.mutable.Map class. Refer to mutable map as mutable.Map.
+
+Example:
+// Empty Hash table:
+var A:Map[Char,Int] = Map()
+
+// A map with keys and values.
+val colors = Map("red" -> "#FF0000", "azure" -> "#F0FFFF")
+
+While defining the empty map, defining type for empty map is essential, if we want to add key/value pair to Map at 
+some point of time.
+
+Defining Empty map with no type:
+var nums=Map() // empty ma is created with type as Map[Nothing, Nothing]=Map()
+
+Now adding key/value pairs-
+A += ('I' -> 1) 
+
+The above statement results in the following error-
+ error: type mismatch;
+ found   : (Char, Int)
+ required: (Nothing, Nothing)
+              nums+=('I'->1)
+              
+Basic Operations on Map:
+keys - returns an iterable containign each key in the map
+values - returns iterable containing each value in the map
+isEmpty - returns true if map is empty otherwise false.
+
+Example:
+object Test {
+   def main(args: Array[String]) {
+      val colors = Map("red" -> "#FF0000",
+                       "azure" -> "#F0FFFF",
+                       "peru" -> "#CD853F")
+
+      val nums: Map[Int, Int] = Map()
+
+      println( "Keys in colors : " + colors.keys )
+      println( "Values in colors : " + colors.values )
+      println( "Check if colors is empty : " + colors.isEmpty )
+      println( "Check if nums is empty : " + nums.isEmpty )
+   }
+}
+
+Result:
+Keys in colors : Set(red, azure, peru)
+Values in colors : MapLike(#FF0000, #F0FFFF, #CD853F)
+Check if colors is empty : false
+Check if nums is empty : true
+
+Concatenating Maps:
+++ operator or Map.++() is used to concatenate 2 or more maps. While concatenating maps, the duplicate keys would be
+removed.
+Example:
+ val colors1 = Map("red" -> "#FF0000",
+                        "azure" -> "#F0FFFF",
+                        "peru" -> "#CD853F")
+      val colors2 = Map("blue" -> "#0033FF",
+                        "yellow" -> "#FFFF00",
+                        "red" -> "#FF0000")
+
+      // use two or more Maps with ++ as operator
+      var colors = colors1 ++ colors2
+      println( "colors1 ++ colors2 : " + colors )
+
+      // use two maps with ++ as method
+      colors = colors1.++(colors2)
+      println( "colors1.++(colors2)) : " + colors )
+
+Here the maps colors1 and colors2 have duplicate key "red". Hence only one of the keys would be taken in concatenated
+map.
+
+Print keys and values from a Map:
+We can iterate through keys and values of a Map using foreach loop.
+
+Example:
+val colors = Map("red" -> "#FF0000",
+                       "azure" -> "#F0FFFF",
+                       "peru" -> "#CD853F")
+
+colors.keys.foreach{ i =>  
+                    print( "Key = " + i )
+                    println(" Value = " + colors(i) )}
+
+foreach is used to iterate through the keys. Result of execution of the above code is...
+
+Result:
+Key = red Value = #FF0000
+Key = azure Value = #F0FFFF
+Key = peru Value = #CD853F
+
+Map.contains method is used to test if a given key exists in the map or not.
+Example:
+  val colors = Map("red" -> "#FF0000",
+                       "azure" -> "#F0FFFF",
+                       "peru" -> "#CD853F")
+ 
+ // Checking if the key "red" exists in the map colors.
+if( colors.contains( "red" )){
+      println("Red key exists with value :"  + colors("red"))
+   }
+else{
+     println("Red key does not exist")
+   }
+
+Scala Map Mehtods:
