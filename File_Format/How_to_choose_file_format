@@ -1,0 +1,121 @@
+How to Choose a Data Format
+
+It’s easy to become overwhelmed when it comes time to choose a data format. Picture it: you have just built and configured your new 
+Hadoop Cluster. But now you must figure out how to load your data. Should you save your data as text, or should you try to use Avro or 
+Parquet? Honestly, the right answer often depends on your data. However, in this post I’ll give you a framework for approaching this 
+choice, and provide some example use cases.
+
+There are different data formats available for use in the Hadoop Distributed File System (HDFS), and your choice can greatly impact your 
+project in terms of performance and space requirements. The findings provided here are based on my team’s past experiences, as well as 
+tests that we ran comparing read and write execution times with files saved in text, Apache Hadoop’s SequenceFile, Apache Avro, Apache 
+Parquet, and Optimized Row Columnar (ORC) formats.
+
+More details on each of these data formats, including characteristics and an overview on their structures, can be found here.
+
+
+Where to start?
+There are several considerations that need to be taken into account when trying to determine which data format you should use in your 
+project; here, we discuss the most important ones you will encounter: system specifications, data characteristics, and use case scenarios.
+
+System specifications
+Start by looking at the technologies you’ve chosen to use, and their characteristics; this includes tools used for ETL(Extract, 
+Transform and Load) processes as wells as tools used to query and analyze the data. This information will help you figure out which 
+format you’re able to use.
+
+Not all tools support all of the data formats, and writing additional data parsers and converters will add unwanted complexity to the 
+project. For example, as of the writing of this post, Impala does not offer support for ORC format; therefore, if you are planning on 
+running the majority of your queries in Impala then ORC would not be a good candidate. You can, instead, use the similar RCFile format, 
+or Parquet.
+
+You should also consider the reality of your system. Are you constrained on storage or memory? Some data formats can compress more than 
+others. For example, datasets stored as Parquet and ORC with snappy compression can reduce their size to a quarter of the size of their 
+uncompressed text format counterpart, and Avro with deflate compression can achieve similar results. However, writing into any of these 
+formats will be more memory intensive, and you might have to tune the memory settings in your system to allocate more memory. There are 
+many options that can be tweaked to adapt your system, and it is often desirable to run some tests in your system before fully committing 
+to using a format. We will talk about some of the tests that you can run in a later section of this post.
+
+Characteristics and size of the data
+The next consideration is around the data you want to process and store in your system. Let’s look at some of the aspects that can 
+impact performance in a data format.
+
+How is your raw data structured?
+Maybe you have regular text format or csv files and you are considering storing them as such. While text files are readable by humans, 
+easy to troubleshoot, and easy to process, they can impact the performance of your system because they have to be parsed every time. 
+Text files also have an implicit format (each column is a certain value) and if you are not careful documenting this, it can cause 
+problems down the line.
+
+If your data is in an xml and json format, then you might run into some issues with file splitability in HDFS. Splitability determines 
+the ability to process parts of a file independently which in turn enables parallel processing in Hadoop, therefore if your data is not 
+splittable we lose the parallelism that allows fast queries. More advanced data formats (Sequence, Avro, Parquet, ORC) offer 
+splitability regardless of the compression codec.
+
+What does your pipeline look like, and what steps are involved?
+Some of the file formats were optimized to work in certain situations. For example, Sequence files were designed to easily share data 
+between Map Reduce (MR) jobs, so if your pipeline involves MR jobs then Sequence files make an excellent option. In the same vein, 
+columnar data formats such as Parquet and ORC were designed to optimize query times; if the final stage of your pipeline needs to be 
+optimized, using a columnar file format will increase speed while querying data.
+
+How many columns are being stored and how many columns are used for the analysis?
+Columnar data formats like Parquet and ORC offer an advantage (in terms of querying speed) when you have many columns but only need a 
+few of those columns for your analysis since Parquet and ORC increase the speed at which the queries are performed. However, that 
+advantage can be foregone if you still need all the columns during search, in which case you could experiment within your system to 
+find the fastest alternative. Another advantage of columnar files is in the way they compress the data, which saves both space and time.
+
+Does your data change over time? If it does, how often does it happen and how does it change?
+Knowing whether your data changes often is important because then we have to consider how a data format handles schema evolution. 
+Schema evolution is the term used for denoting when the structure of a file has changed after being previously stored with a different 
+structure, such changes in structure can include the change of data type for a column, the addition of columns, and the removal of columns. 
+Text files do not explicitly store the schema, so when a new person joins the project is up to them to figure out what columns and column 
+values the data has. If your data changes suddenly (addition of columns, deletion of columns, changes on the data types) then you need 
+to figure out how to reconcile older data and new data with the format.
+
+Certain file formats handle the schema evolution more elegantly than others. For example, at the moment Parquet only allows the addition 
+of new columns at the end of columns and it doesn’t handle deletion of columns, whereas Avro allows for addition, deletion, and renaming 
+of multiple columns. If you know your data is bound to change often (maybe developers add new metrics every few months to help tracking 
+usage of an app) then Avro will be a good option. If your data doesn’t change often or won’t change, schema evolution is not needed.
+
+Additional things to keep in mind with schema evolution are the trade-offs of keeping track of the newer schemas. If the schema for a 
+data format like Avro or Parquet needs to be specified (rather than extracted from the data) then we will require more effort storing 
+and creating the schema files.
+
+Use case scenarios
+
+Each of the data formats has its own strengths, weaknesses, and trade-offs, so the decision on which format to use should be based on 
+your specific use cases and systems.
+
+If your main focus is to be able to write data as fast as possible and you have no concerns about space, then it might be acceptable to 
+just store your data in text format with the understanding that query times for large data sets will be longer.
+
+If your main concern is being able to handle evolving data in your system, then you can rely on Avro to save schemas. Keep in mind, 
+though, that when writing files to the system Avro requires an pre-populated schema, which might involve some additional processing at 
+the beginning.
+
+Finally, if your main use case is analysis of the data and you would like to optimize the performance of the queries, then you might want 
+to take a look at a columnar format such as Parquet or ORC because they offer the best performance in queries, particularly for partial 
+searches where you are only reading specific columns. However, the speed advantage might decrease if you are reading all the columns.
+
+There is a pattern in the mentioned uses cases: if a file takes longer to write, it is because it has been optimized to increase speed 
+during reads.
+
+Tests
+
+We have already discussed how choosing the right data format for your system depends on several factors; to provide a more comprehensive explanation, we set out to empirically compare the different data formats in terms of performance for writing and reading files.
+
+We created some quantitative tests comparing the following five data formats available in the Hadoop ecosystem:
+
+– Text
+– Sequence
+– Avro
+– Parquet
+– ORC
+
+Our test measure execution times for a couple different exploratory queries, using the following technologies:
+
+– Hive
+– Impala
+
+We tested against three different datasets:
+
+Narrow dataset – 10,000,000 rows of 10 columns resembling an Apache log file
+Wide dataset – 4,000,000 rows of 1000 columns composed by the first few columns of personal identification data and the rest set by random numbers and booleans.
+Wide dataset large – 1TB of the wide dataset and 302,924,000 rows.
