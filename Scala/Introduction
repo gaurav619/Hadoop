@@ -1,0 +1,178 @@
+INTRODUCTION TO SCALA
+
+Scala is developed by Martin Odersky and released in 2003. It integrates features of object oriented 
+and functional languages.
+Scala --> means scalable language. It is compiled and runs on JVM.
+Scala is pure object oriented --> which means every value is treated as object.
+Scala is functional --> every function is a value. Since every value is an object, every function is an object.
+Scala is statically typed --> means type of the variable is known at compile time. It doesn’t expect 
+to provide redundant type information.
+Static typed vs Dynamic typed: In case of static typed languages, type of the variable is known at compile time. 
+For dynamic typing, type of the variable is interpreted at runtime.
+
+Scala runs on JVM --> Scala code compiles into java byte code which is executed by jvm.
+Both java and scala have a common runtime platform. 
+
+scalac --> to compile scala code
+scala --> to run the byte code
+
+scalac and scala commands are same as javac and java
+
+STEPS TO INSTALL/RUN SCALA:
+
+On Windows:
+
+1. Java setup is required (java 1.5 or greater is required)
+2. Download scala from http://www.scala-lang.org/downloads
+   In windows, if its .msi installer, run the file as admin, accept license agreement and install it in 
+   some directory (as Drive:\Scala\..) or in the default location as C:\Program Files\Scala\..
+
+3. scala -version
+   The above command displays the scala version that is installed
+   
+On Linux:
+1. As discussed above , java is the pre-requisite for installing scala.
+2. Download scala jar which looks as scala-<version>-installer.jar.
+3. Now execute the following command:
+   java -jar scala-2.9.0.1-installer.jar
+4. During the installation process, accept the license agreement, specify the path where scala has to be installed
+   (eg: /usr/local/share).
+5. Finally, scala -version at the command prompt displays the version of scala that is installed.
+
+
+BASIC SYNTAX:
+   Scala program is a collection of objects which communicate with each other via invoking  each other's methods.
+   object -> has state and behavior
+   class -> template/blueprint  for the object of it's type.
+   Methods -> Method is basically a behavior. Within the body of the method, logic is written, data is manipulated and 
+              actions are executed.
+   Fields -> These are the instant variables defined in the class. These are unique for each object and 
+             and determine the state of the object.
+   
+   First scala program in interactive mode:
+   C:\>scala
+   Welcome to Scala version 2.11.1 (Java HotSpot(TM) 64-Bit Server VM, Java 1.7.0).
+   Type in expressions to have them evaluated.
+   Type :help for more information.
+   
+   scala>
+   scala> println("Hello..!!!")
+   Hello..!!!
+   
+   Simple script mode program:
+ 
+   object HelloWorld {
+   /* This is my first java program.  
+    * This will print 'Hello World' as the output
+    */
+   def main(args: Array[String]) {
+      println("Hello, world!") // prints Hello World
+   }
+ }
+
+Save the above code in a notepad with .scala extension. Remember that the file name should be same as the object name
+i.e HelloWorld. Now compile and run the code as below:
+   
+   D:\ScalaPrograms> scalac HelloWorld.scala // generates HelloWorld.class file which contains byte code
+   D:\ScalaPrograms> scala HelloWorld
+   Hello, World!
+
+ Note:
+ •Case sensitive
+ 
+ •Class Names: For all class names, first letter must be in upper case. 
+  If class name constitutes several words, then each inner word’s first letter must be in upper case.
+  Example: MyFirstScalaClass
+   
+ •Method Names: All the method names must start with lover case letter. If the method name constitutes several words,
+  then each inner word’s first letter must be in upper case.
+  Example: def myMethodName
+   
+ •Program File Name: The program file name should match the object name. When saving the file append the 
+  extension .scala to the end of the file name. 
+  Example:  if object name is HelloWorld then the file should be saved as HelloWorld.scala
+   
+ •def main(args:Array[String]) -  It is the mandatory part of every scala program from which processing starts.
+ 
+SCALA IDENTIFIERS:
+As in all programming languages, keywords cannot be used as identifiers. Identifiers are case sensitive. 
+Four types of identifiers are supported in scala:
+
+•Alpha numeric identifiers:  start with alphabet or underscore. 
+‘$’ special character shouldn’t be part of the identifier. Ex: age, name _hello
+
+•Operator identifiers: These identifiers consist of operators as characters. 
+These operators are printable ascii characters like +,:,?,~ or #.
+Example: +, ++, <?>, :>
+
+The scala compiler internally turns the operator identifiers into legal java identifiers with embedded $ character.
+For example the operator :-> would be represented internally as $colon$minus$greater
+
+•Mixed identifiers: Consists of alphanumeric identifier, followed by an underscore and also an operator identifier.
+Example: unary_+, myvar_=
+
+•Literal idnetifiers: It is an arbitrary string enclosed in back ticks as ``
+Example: `x`, `<clint>`, `yield`
+
+SCALA KEYWORDS:
+
+List of scala keywords:
+
+abstract, case,	catch, class, def, do, else, extends, false,	final, finally, for, forSome,	if, implicit, import,
+lazy,	match, new,	null, object,	override, package, private, protected,	return,	sealed, super,
+this, throw, trait, try, true, type, val, var, while, with, yield, -, :, =, =>, <-, <:, <%, >:, #, @		
+
+Comments in Scala:
+Scala supports both single line comments (strating with //) and also multi line comments (/*.. */) as in java.
+
+Newline characters: A semicolon at the end of the statement is optional. It is essential if 
+we intend to write multiple statements on a single line.
+Example: val s="hello"; println(s)
+
+Scala Packages: Package is named module of code.
+Importing a package -> import scala.xml._ 
+The above statement imports contents of scala.xml package.
+
+Importing a single class -> import scala.collection.mutable.HashMap
+
+Import more than one class or object from a package -> import scala.collection.immutable.{TreeMap, TreeSet}
+
+SCALA DATATYPES:
+Scala has same data types as java with same memory allocation and precision. Following are the supported 
+data types-
+Byte, short, int, long, float, double, char, string, boolean, unit, null (empty reference), unit (means no value),
+nothing (subtype of every other type which includes no values), any (supertype of any type; any object is of type Any),
+AnyRef (supertype of any reference type).
+
+As said, since everything in scala is an object all the above data types are objects.
+
+SCALA BASIC LITERALS:
+
+Integer literals: These are of type int. When the literal is long, it is followed by L or I suffix.
+Example: 034, 21, 0777L
+
+Floating Point Literals: These are of type float and followed by suffix F or f. If there is no suffix then
+the literal is treated as of type double.
+Example: 0.0, 1e30f, 3.1419f, 1.0e100
+
+Boolean literals: True and False are the two boolean types.
+
+Character literals: Single character enclosed in single quotes. The character can also have escape sequence.
+Example:'a', '\u001'
+
+String literals: Sequence of characters enclosed in double quotes. The characters are either printable or could also 
+be described by escape sequence.
+Example: "hello, \nWorld!"
+         "This string contains a \ "character"
+
+Multi Line Strings:
+A multi line string literal is a sequence of  characters enclosed in triple quotes (""".....""").
+Example: """ Hi I am Padma
+         working on Big Data
+         Technologies """
+         
+Null value: It is of type scala.Null and compatible with every reference type. The reference value refers to special
+null object.
+
+Following are the escape sequences recognized:
+\b, \t, \n, \f, \r, \", \', \\
