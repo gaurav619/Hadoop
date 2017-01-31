@@ -96,26 +96,3 @@ searches where you are only reading specific columns. However, the speed advanta
 
 There is a pattern in the mentioned uses cases: if a file takes longer to write, it is because it has been optimized to increase speed 
 during reads.
-
-Tests
-
-We have already discussed how choosing the right data format for your system depends on several factors; to provide a more comprehensive explanation, we set out to empirically compare the different data formats in terms of performance for writing and reading files.
-
-We created some quantitative tests comparing the following five data formats available in the Hadoop ecosystem:
-
-– Text
-– Sequence
-– Avro
-– Parquet
-– ORC
-
-Our test measure execution times for a couple different exploratory queries, using the following technologies:
-
-– Hive
-– Impala
-
-We tested against three different datasets:
-
-Narrow dataset – 10,000,000 rows of 10 columns resembling an Apache log file
-Wide dataset – 4,000,000 rows of 1000 columns composed by the first few columns of personal identification data and the rest set by random numbers and booleans.
-Wide dataset large – 1TB of the wide dataset and 302,924,000 rows.
