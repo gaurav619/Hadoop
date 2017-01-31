@@ -1,0 +1,193 @@
+Nested Functions:
+Scala supports to define functions inside a function. The functions defined inside other functions are called 
+Local functions.
+Example:
+
+object Test {
+   def main(args: Array[String]) {
+      println( factorial(0) )
+      println( factorial(1) )
+      println( factorial(2) )
+      println( factorial(3) )
+   }
+
+   def factorial(i: Int): Int = {
+      def fact(i: Int, accumulator: Int): Int = {
+         if (i <= 1)
+            accumulator
+         else
+            fact(i - 1, i * accumulator)
+      }
+      fact(i, 1)
+   }
+}
+
+Result:
+1
+1
+2
+6
+
+
+Partially Applied Functions:
+When we invoke a function, its like applying the function to the arguments. If we send only few arguments, it is called a 
+partially applied function. Using this concept, we could bind few arguments and leave the rest to be filled in later.
+
+Example:
+
+
+import java.util.Date
+
+object Test {
+   def main(args: Array[String]) {
+      val date = new Date
+      log(date, "message1" )
+      Thread.sleep(1000)
+      log(date, "message2" )
+      Thread.sleep(1000)
+      log(date, "message3" )
+   }
+
+   def log(date: Date, message: String)  = {
+     println(date + "----" + message)
+   }
+}
+
+In the above example, log method is frequently invoked with same value for date and different values for message.
+We can actually eliminate passing the date to each call by applying that argument partially to the log.
+We could do this as below-
+
+import java.util.Date
+
+object Test {
+   def main(args: Array[String]) {
+      val date = new Date
+  
+/* bind value to date and leave the second parameter unbound by putting underscore. 
+ This is called partially applied function stored in a variable*/
+
+      val logWithDateBound = log(date, _ : String) 
+      
+  // New method is invoked with only the unbound argument message
+      logWithDateBound("message1" )
+      Thread.sleep(1000)
+      logWithDateBound("message2" )
+      Thread.sleep(1000)
+      logWithDateBound("message3" )
+   }
+
+   def log(date: Date, message: String)  = {
+     println(date + "----" + message)
+   }
+}
+
+
+Functions with Named Arguments:
+In a normal function call, the arguments passed must match with the order in which parameters of the callee function 
+are defined.
+
+Named arguments allow to pass parameters to function in different order however arguments are preceeded by parameter name
+and equals sign.
+
+Example:
+object Test {
+   def main(args: Array[String]) {
+        printInt(b=5, a=7);
+   }
+   def printInt( a:Int, b:Int ) = {
+      println("Value of a : " + a );
+      println("Value of b : " + b );
+   }
+}
+
+In the above example, the function/method printInt is invoked from main() by passing arguments as b and then a
+while parameters of printInt specified as a and then b.
+
+
+Recursion Functions:
+Recursion means a function can call itself. Scala supports recursive functions very well.
+
+Example:
+object Test {
+   def main(args: Array[String]) {
+      for (i <- 1 to 10)
+         println( "Factorial of " + i + ": = " + factorial(i) )
+   }
+   
+   def factorial(n: BigInt): BigInt = {  
+      if (n <= 1)
+         1  
+      else    
+      n * factorial(n - 1)
+   }
+}
+
+
+Higher Order functions:
+These are the functions that take other functions as parameters or whose result is a function.
+
+
+Anonymous functions:
+These are called function literals and at run time, these are instantiated into objects called function values.
+First class functions -> we can express functions in function literal syntax (i.e (x:Int) => x+1
+Example:
+var inc = (x:Int) => x+1
+var x = inc(7)-1
+
+Multiple parameters : var mul = (x:Int, y:Int) => x*y
+No parameters : var userDir = () => { System.getProperty("user.dir") }
+
+
+Currying Functions:
+Currying means transforming a function that takes multiple parameters into chain of functions, 
+each taking a single parameter.
+Syntax:
+def strcat(s1: String)(s2: String) = s1 + s2
+
+object Test {
+   def main(args: Array[String]) {
+      val str1:String = "Hello, "
+      val str2:String = "Scala!"
+      println( "str1 + str2 = " +  strcat(str1)(str2) )
+   }
+
+   def strcat(s1: String)(s2: String) = {
+      s1 + s2
+   }
+}
+
+
+
+SCALA CLOSURES:
+A closure is a function whose return value depends on the value of one or more variables declared outside the 
+function.
+
+Consider this example:
+val multiplier = (i:Int) => i * 10
+
+The above anonymous functions has the variable i whose value determines the return value from function.
+
+Consider another piece of code:
+val multiplier = (i:Int) => i * factor
+
+Here there are two variables i and factor. i is the formal parameter which is the value passed to the function whenever
+multiplier is called. However factor is not formal parameter.
+
+var factor = 3
+val multiplier = (i:Int) => i * factor
+
+In the above two lines of code, factor refers to variable outside the function but which is in the scope.
+
+Sample Code:
+object Test {
+   def main(args: Array[String]) {
+      println( "muliplier(1) value = " +  multiplier(1) )
+      println( "muliplier(2) value = " +  multiplier(2) )
+   }
+   var factor = 3
+   val multiplier = (i:Int) => i * factor
+}
+
+Result:
+muliplier(1) value = 3
+muliplier(2) value = 6
