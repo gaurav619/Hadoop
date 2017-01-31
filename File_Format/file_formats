@@ -1,0 +1,54 @@
+
+Hadoop is an ecosystem including many tools to store and process big data. HDFS is one that is used for storage, and it’s a special file
+system different than the one used on our desktop machines. We are not going to explain why it’s special, instead, we will introduce 
+several special file formats supported by HDFS.
+
+
+Text/CSV Files
+===============
+CSV file is the most commonly used data file format. It’s the most readable and also ubiquitously easy to parse. It’s the choice of format 
+to use when export data from an RDBMS table. However, human readable does not mean it’s machine readable. It has three major drawbacks 
+when used for HDFS. First of all, all lines in a CSV file is a record, therefore, we should not include any headers or footers. In other 
+word, CSV file cannot be stored in HDFS with any meta data. Second of all, CSV file has very limited support for schema evolution. 
+Because the fields for each record are ordered, we are not able to change the orders. We can only append new fields to the end of each line. 
+Last, CSV file does not support block compression which many other file formats support. The whole file has to be compressed and 
+decompressed for reading, adding a significant read performance cost to the files.
+
+JSON Files
+============
+JSON is in text format that stores meta data with the data, so it fully supports schema evolution. You can easily add or remove attributes 
+for each datum. However, because it’s text file, it doesn’t support block compression.
+
+Avro Files
+===========
+Avro File is serialized data in binary format. It uses JSON to define data types, therefore it is row based. It is the most popular storage 
+format for Hadoop. Avro stores meta data with the data, and it also allows specification of independent schema used for reading the files. 
+Therefore, you can easily add, delete, update data fields by just creating a new independent schema. Also, Avro files are splittable, 
+support block compression and enjoys a wide arrange of tool support within Hadoop ecosystem.
+
+Sequence Files
+===============
+Sequence files are binary files with a CSV-like structure. It does not store meta data, nor does it support schema evolution, but it 
+does support block compression. Due to its unreadability, they are mostly used for intermediate data storage within a sequence of 
+MapReduce jobs.
+
+ORC Files
+===========
+RC files or Record Columnar files are columnar file format. It’s great for compression and best for query performance, with the sacrifice 
+of cost of more memory and poor write performance. ORC are optimized RC files that works better with Hive. It compresses better, but 
+still does not support schema evolution. It is worthwhile to note that OCR is a format primarily backed by Hortonworks, and it’s not 
+supported by Cloudera Impala.
+
+Parquet Files
+==============
+Paquet file format is also a columnar format. Just like ORC file, it’s great for compression with great query performance. It’s especially 
+efficient when querying data from specific columns. Parquet format is computationally intensive on the write side, but it reduces a lot
+of I/O cost to make great read performance. It enjoys more freedom than ORC file in schema evolution, that it can add new columns to 
+the end of the structure. It is also backed by Cloudera and optimized with Impala.
+
+Since Avro and Parquet have so much in common, let’s review a little bit more of both. When choosing a file format to use with HDFS, 
+we need to consider read performance and write performance. Because the nature of HDFS is to store data that is write once, read 
+multiple times, we want to emphasize on the read performance. The fundamental difference in terms of how to use either format is 
+this: Avro is a Row based format. If you want to retrieve the data as a whole, you can use Avro. Parquet is a Column based format. 
+If your data consists of lot of columns but you are interested in a subset of columns, you can use Parquet.
+
