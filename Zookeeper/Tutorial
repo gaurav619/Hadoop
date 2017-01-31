@@ -1,0 +1,26 @@
+Introduction:
+------------
+Apache Zookeeper is an open source project from Apache Software Foundation
+Apache Zookeepr is distributed coordination service which is used to build general purpose distributed applications.
+
+In distributed systems, partial failures are common. In distibuted systems, many nodes communicate each other, some these 
+operations may fail and sender doen't know the staus of the message. To guaranty the communication between nodes, we need 
+very realiable coordination service.
+
+ZooKeeper can’t make partial failures go away, these are intrinsic to distributed systems. Zookeeper handles all these
+partial failures and it connot hide them.
+
+Features of ZooKeeper:
+----------------------
+1. ZooKeeper is simple:  A stripped-down filesystem that exposes a few simple operations, and some 
+    extra abstractions such as ordering and notifications.
+2. ZooKeeper is expressive: Its primitives are a rich set of building blocks that can be used to build
+    a large class of coordination data structures and protocols. 
+    Examples include: dis-tributed queues, distributed locks, and leader election among a group of peers.
+3.  Zookeeper is highly available: It runs on a collection of machines and is designed to be highly available.
+    There is no single point of failure and it is reliable
+4. ZooKeeper facilitates loosely coupled interactions: Participants that do not need to know about one
+    another. Zookeeper can act as communicator in betwwen them, one can leave message in zookeeper and other one
+    can read it even first is shutdown also.
+5. ZooKeeper is a library: shared repository of implementations and recipes of common coordination patterns. 
+    Individual people can write thier own custom protocols and the community can add to and improve the libraries.
