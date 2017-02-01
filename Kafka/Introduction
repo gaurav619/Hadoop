@@ -1,0 +1,65 @@
+Kafka is a publish subscribe messaging system. It is a distributed, partitioned and replicated commit log service.
+
+-> Kafka maintains feeds of messages in categories called topics.
+-> Processes that publish messages to a kafka topic are called producers.
+-> Processes that subscribe to topics and read the message feed are called consumers.
+-> Kafka is configured on a cluster of 1 or more servers where each one acts as a broker.
+Communication between client and server (brokers) is using TCP protocol.
+
+Topic:
+A topic is a category or feed name to which messages are published. For each topic, kafka cluster maintains a 
+partitioned log.
+
+Each partition is ordered and immutable which is continuously appended to a commit log. The messages in partitions 
+are each assigned a sequential id to uniquely identify the message.
+The Kafka cluster retains all published messages (whether or not consumed) for a configurable period of time.
+Although kafka retains lots of data, performance is constant. 
+The metadata retained on a consumer basis is the position of the consumer called the 'offset'. This offset is
+controlled by the consumer and can consume messages in any order it likes.
+
+The partitions of a topic allow to scale beyond a single server. A topic can have many partitions. Each partition
+is replicated across a configurable number of servers for fault tolerance.
+
+Every partition has 1 server which acts as leader and zero or more servers act as followers. The leader handles all
+the reads and write requests where as the followers replicate the leader. If leader fails, one of the follower
+automatically becomes the new leader. Each server acts as leader for some of its partitions and follower for others
+  
+Producers: They publish data to topics of their choice. The messages are assigned to partitions within the topic 
+in a round-robin-fashion to balance load or could be done according to some function based on the key of the 
+message.
+
+Consumers: There are 2 models: queuing and publish-subscribe. In a queue, a pool of consumers read from a server
+and each message goes to one of them. In publish-subscribe, message is broadcasted to all the consumers.
+Consumers label themselves with a consumer group name and each message publichsed to a topic is delivered to one
+consumer instance within each subscribing consumer group. consumer instances can be in separate processes or on 
+separate machines.
+
+kafka has stronger ordering gurantees than a traditional messaging system too.If there are multiple consumers, the
+messages are delivered asynchronously to consumers. Ordering is also achieved by assigning partitions in the topic 
+to consumers in the consumer group (each partition is consumed by exactly one consumer in the group).
+
+No.of consumer instances cannot be more than partitions.
+Guarantees: For a topic with replication factor N, up to N-1 server failures can be tolerated without losing 
+any messages committed to the log.
+
+Commit Log:
+Kafka can serve as a kind of external commit-log for a distributed system. 
+The log helps replicate data between nodes and acts as a re-syncing mechanism for failed nodes to restore their 
+data. The log compaction feature in Kafka helps support this usage. In this usage Kafka is similar to 
+Apache BookKeeper project.
+
+Start Zookeeper:
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+Start kafka-server:
+bin/kafka-server-start.sh config/server.properties
+
+Create a topic
+bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+bin/kafka-topics.sh --list --zookeeper localhost:2181
+
+start a producer:
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+
+start a consumer:
+bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test --from-beginning
