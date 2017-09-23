@@ -1,0 +1,94 @@
+Kafka -
+ 
+ 
+Apache Kafka was originally developed by LinkedIn, and was subsequently open sourced in early 2011
+ 
+Apache Kafka is a fast, scalable, fault-tolerant publish-subscribe messaging system which enables communication between producers and consumers using message based topics. It designs a platform for high-end new generation distributed applications.
+ 
+The ability to give higher throughput, reliability and replication has made this technology replace the conventional message brokers such as JMS, AMQP, etc. Some of the other applications offering the similar functionality are ActiveMQ, RabbitMQ, Apache Flume, Storm and Spark. But why should you go for Apache Kafka instead of Flume?
+ 
+--------------------------------------------------------------------------------------------------------------------
+|    Apache Kafka                                                                                                                                                                                                                              Apache Flume                                                                                                      |
+--------------------------------------------------------------------------------------------------------------------
+| General-purpose tool for multiple producers and consumers.                 Special-purpose tool for specific applications.|
+| Replicates the events using ingest pipelines.                                                                   Does not replicate the events.                                                                      |
+--------------------------------------------------------------------------------------------------------------------
+ 
+ 
+core APIs :
+------------
+ 
+Producer API -This API permits the applications to publish stream of records to one or more topics.
+Consumer API -The Consumer API lets the application to subscribe to one or more topics and process the produced stream of records.
+Streams API – This API takes the input from one or more topics and produces the output to one or more topics by converting the input streams to the output ones.
+Connector API – This API is responsible for producing and executing reusable producers and consumers which are able to link topics to the existing applications.
+ 
+Kafka Components :
+-------------------
+ 
+Topics
+Producers
+Consumers
+Brokers
+For additional introductory information about Kafka, see the Apache introduction to Kafka. For an example that simulates the use of streaming geo-location information (based on a previous version of Kafka), see Simulating and Transporting the Real-Time Event Stream with Apache Kafka.
+ 
+Topics- 
+ 
+                Kafka maintains feeds of messages in categories called topics. Each topic has a user-defined category (or feed name),
+                to which messages are published.
+                For each topic, the Kafka cluster maintains a structured commit log with one or more partitions:
+                Kafka appends new messages to a partition in an ordered, immutable sequence. Each message in a topic is assigned a sequential number
+                that uniquely identifies the message within a partition. This number is called an offset, and is represented in the diagram by numbers
+                within each cell (such as 0 through 12 in partition 0).Partition support for topics provides parallelism. In addition, because writes
+                to a partition are sequential, the number of hard disk seeks is minimized. This reduces latency and increases performance.
+ 
+Producers -
+ 
+                Producers are processes that publish messages to one or more Kafka topics. The producer is responsible for choosing which message to
+                assign to which partition within a topic. Assignment can be done in a round-robin fashion to balance load, or it can be based on a
+                semantic partition function.
+ 
+Consumers -
+ 
+                Consumers are processes that subscribe to one or more topics and process the feeds of published messages from those topics.
+                Kafka consumers keep track of which messages have already been consumed by storing the current offset. Because Kafka retains all
+                messages on disk for a configurable amount of time, consumers can use the offset to rewind or skip to any point in a partition.
+ 
+Brokers -
+ 
+                A Kafka cluster consists of one or more servers, each of which is called a broker. Producers send messages to the Kafka cluster,
+                which in turn serves them to consumers. Each broker manages the persistence and replication of message data.
+                Kafka Brokers scale and perform well in part because Brokers are not responsible for keeping track of which messages have been consumed.
+                Instead, the message consumer is responsible for this. This design feature eliminates the potential for back-pressure when consumers
+                process messages at different rates.
+ 
+               
+Kafka Commands -
+ 
+Create topic -
+               
+                /usr/bin/kafka-topics --create --zookeeper hostname:2181 --replication-factor 2 --partitions 4 --topic test_gp
+ 
+List topics -
+ 
+                /usr/bin/kafka-topics --zookeeper hostname:2181 --list
+               
+Describe topic -
+ 
+                /usr/bin/kafka-topics --zookeeper hostname:2181 --describe --topic test_gparo
+ 
+Delete topic -
+ 
+                /usr/bin/kafka-topics --zookeeper hostname:2181 --delete --topic test_gp
+ 
+NOTE - set delete.topic.enable = true
+ 
+Start Consumer -
+               
+                /usr/bin/kafka-console-consumer --bootstrap-server hostname:2181 --topic test_gparo --from-beginning
+ 
+Start Producer -
+ 
+                /usr/bin/kafka-console-producer --broker-list hostname:9092 --topic test_gparo
+               
+               
