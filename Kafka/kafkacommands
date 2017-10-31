@@ -1,0 +1,36 @@
+Kafka in At&t
+------------------
+ 
+List of kafka brokers : /usr/hdp/2.5.0.0-1245/kafka/bin/kafka-topics.sh --list --zookeeper localhost:2181
+ 
+Describe topic
+-------------------
+/usr/hdp/2.5.0.0-1245/kafka/bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic topic_name
+ 
+Kafka installed at
+----------------------
+ 
+/etc/kafka/conf
+ 
+Kafka backup
+------------------
+/usr/hdp/2.2.6.0-2800/etc/kafka
+ 
+ 
+How to see data inside kafka topic
+---------------------------------------------
+/usr/hdp/2.5.0.0-1245/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic ap_syslog_spark_streaming --from-beginning --zookeeper localhost:2181
+ 
+To read only todays data
+--------------------------------
+/usr/hdp/2.5.0.0-1245/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic ap_syslog_spark_streaming --from-beginning --zookeeper localhost:2181 | grep -i " Oct 23"
+ 
+Kafka logs
+-------------
+ 
+Cd /hak_data/prod/kafka-logs
+ 
+ 
+ 
+Zookeeper port number    : 2181
+Kafka Broker port number : 9092
