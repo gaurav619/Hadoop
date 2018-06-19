@@ -1,0 +1,21 @@
+This is a formula to estimate Hadoop storage (H):
+
+H=crS/(1-i)
+
+where:
+
+c = average compression ratio. It depends on the type of compression used (Snappy, LZOP, ...) and size of the data. When no compression is used, c=1.
+
+r = replication factor. It is usually 3 in a production cluster.
+
+S = size of data to be moved to Hadoop. This could be a combination of historical data and incremental data. The incremental data can be daily for example and projected over a period of time (3 years for example).
+
+i = intermediate factor. It is usually 1/3 or 1/4. Hadoop's working space dedicated to storing intermediate results of Map phases.
+
+Example: With no compression i.e. c=1, a replication factor of 3, an intermediate factor of .25=1/4 H= 13S/(1-1/4)=3S/(3/4)=4S With the assumptions above, the Hadoop storage is estimated to be 4 times the size of the initial data size.
+
+**2. This is the formula to estimate the number of data nodes (n): ** n= H/d = crS/(1-i)*d
+
+where d= disk space available per node. All other parameters remain the same as in 1.
+
+Example: If 8TB is the available disk space per node (10 disks with 1 TB , 2 disk for operating system etc were excluded.). Assuming initial data size is 600 TB. n= 600/8=75 data nodes needed
